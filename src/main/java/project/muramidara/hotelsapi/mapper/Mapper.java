@@ -1,4 +1,6 @@
 package project.muramidara.hotelsapi.mapper;
 
-public class Mapper {
+public interface Mapper<F, T> {
+    T map(F entity);
+
 }

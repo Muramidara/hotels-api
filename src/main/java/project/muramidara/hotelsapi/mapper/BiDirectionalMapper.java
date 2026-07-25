@@ -1,4 +1,6 @@
 package project.muramidara.hotelsapi.mapper;
 
-public class BiMapper {
+public interface BiDirectionalMapper<E, D> {
+    D map(E entity);
+    E mapFrom(D dto);
 }
