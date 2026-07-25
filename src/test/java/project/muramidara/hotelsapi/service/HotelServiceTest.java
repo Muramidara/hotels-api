@@ -21,7 +21,7 @@ public class HotelServiceTest {
 
     @Test
     void findAllTest() {
-        var hotels = hotelRepository.findAll();
+        var hotels = hotelService.findAll();
         assertThat(hotels).hasSize(3);
         var hotel1 = hotels.get(0);
         var hotel2 = hotels.get(1);
@@ -32,9 +32,22 @@ public class HotelServiceTest {
     }
 
     @Test
+    void findAllByFilterTest() {
+        var hotels = hotelService.findAll();
+        assertThat(hotels).hasSize(3);
+        var hotel1 = hotels.get(0);
+        var hotel2 = hotels.get(1);
+        var hotel3 = hotels.get(2);
+        assertEquals("Grand Plaza Downtown", hotel1.getName());
+        assertEquals("Sunset Inn Beach Resort", hotel2.getName());
+        assertEquals("Royal Park Hotel", hotel3.getName());
+    }
+
+
+    @Test
     void findById() {
-        var existingHotel = hotelRepository.findById(HOTEL1_ID);
-        var fakeHotel = hotelRepository.findById(-1L);
+        var existingHotel = hotelService.findById(HOTEL1_ID);
+        var fakeHotel = hotelService.findById(-1L);
         assertTrue(existingHotel.isPresent());
         assertTrue(fakeHotel.isEmpty());
         existingHotel.ifPresent(hotel ->
@@ -43,7 +56,7 @@ public class HotelServiceTest {
     }
 
     @Test
-    void update() {
+    void addAmenitiesTest() {
         var hotel = hotelRepository.getReferenceById(HOTEL1_ID);
         var testingName = "Testing hotel name";
         assertEquals("Grand Plaza Downtown", hotel.getName());
@@ -54,9 +67,9 @@ public class HotelServiceTest {
     }
 
     @Test
-    void delete() {
-        var existingHotel = hotelRepository.findById(HOTEL1_ID);
-        var fakeHotel = hotelRepository.findById(-1L);
+    void updateTest() {
+        var existingHotel = hotelService.findById(HOTEL1_ID);
+        var fakeHotel = hotelService.findById(-1L);
         assertTrue(existingHotel.isPresent());
         assertTrue(fakeHotel.isEmpty());
         existingHotel.ifPresent(hotel ->
@@ -65,9 +78,31 @@ public class HotelServiceTest {
     }
 
     @Test
-    void create() {
-        var existingHotel = hotelRepository.findById(HOTEL1_ID);
-        var fakeHotel = hotelRepository.findById(-1L);
+    void deleteTest() {
+        var existingHotel = hotelService.findById(HOTEL1_ID);
+        var fakeHotel = hotelService.findById(-1L);
+        assertTrue(existingHotel.isPresent());
+        assertTrue(fakeHotel.isEmpty());
+        existingHotel.ifPresent(hotel ->
+                assertEquals("Grand Plaza Downtown", hotel.getName())
+        );
+    }
+
+    @Test
+    void createTest() {
+        var existingHotel = hotelService.findById(HOTEL1_ID);
+        var fakeHotel = hotelService.findById(-1L);
+        assertTrue(existingHotel.isPresent());
+        assertTrue(fakeHotel.isEmpty());
+        existingHotel.ifPresent(hotel ->
+                assertEquals("Grand Plaza Downtown", hotel.getName())
+        );
+    }
+
+    @Test
+    void groupByFilterTest() {
+        var existingHotel = hotelService.findById(HOTEL1_ID);
+        var fakeHotel = hotelService.findById(-1L);
         assertTrue(existingHotel.isPresent());
         assertTrue(fakeHotel.isEmpty());
         existingHotel.ifPresent(hotel ->

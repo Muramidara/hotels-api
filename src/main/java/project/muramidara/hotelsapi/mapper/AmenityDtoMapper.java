@@ -13,8 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AmenityDtoMapper implements BiDirectionalMapper<Amenity, AmenityDto> {
 
-    private final AmenityRepository amenityRepository;
-
     @Override
     public AmenityDto map(Amenity amenity) {
         return new AmenityDto(amenity.getName());
@@ -22,11 +20,6 @@ public class AmenityDtoMapper implements BiDirectionalMapper<Amenity, AmenityDto
 
     @Override
     public Amenity mapFrom( AmenityDto dto) {
-        var maybeAmenity = amenityRepository.findAmenityByName(dto.getName());
-
-        if (maybeAmenity.isPresent()){
-            return maybeAmenity.get();
-        }
         var newAmenity = new Amenity();
         newAmenity.setName(dto.getName());
         return newAmenity;

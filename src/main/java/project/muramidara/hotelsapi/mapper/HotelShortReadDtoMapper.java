@@ -18,7 +18,6 @@ public class HotelShortReadDtoMapper implements Mapper<Hotel, HotelShortReadDto>
         var addressDto = addressDtoMapper.map(hotel.getAddress());
         var contactsDto = contactsDtoMapper.map(hotel.getContacts());
         return HotelShortReadDto.builder()
-                .id(hotel.getId())
                 .name(hotel.getName())
                 .description(hotel.getDescription())
                 .address(buildAddress(addressDto))
