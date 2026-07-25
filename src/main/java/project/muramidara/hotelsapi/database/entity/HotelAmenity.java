@@ -16,8 +16,20 @@ public class HotelAmenity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     Hotel hotel;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amenity_id")
     Amenity amenity;
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+        hotel.getAmenities().add(this);
+    }
+
+    public void setAmenity(Amenity amenity) {
+        this.amenity = amenity;
+        amenity.getHotelAmenities().add(this);
+    }
 }
