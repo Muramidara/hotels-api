@@ -21,6 +21,7 @@ public class HotelServiceTestIT {
     private final static String HOTEL_BRAND = "Marriott";
     private final static String HOTEL_CITY = "London";
     private final static String HOTEL_COUNTRY = "USA";
+    private final static String AMENITY = "Parking";
 
     private final HotelRepository hotelRepository;
     private final HotelService hotelService;
@@ -54,15 +55,18 @@ public class HotelServiceTestIT {
         var filterBrand = "brand";
         var filterCity = "city";
         var filterCountry = "country";
-//        var filterAmenities = "amenities";
+        // TODO: replace amenity with amenities
+        var filterAmenity = "amenity";
         var hotelsByName = hotelService.findAllByFilter(filterName, HOTEL1_NAME);
         var hotelsByBrand = hotelService.findAllByFilter(filterBrand, HOTEL_BRAND);
         var hotelsByCity = hotelService.findAllByFilter(filterCity, HOTEL_CITY);
         var hotelsByCountry = hotelService.findAllByFilter(filterCountry, HOTEL_COUNTRY);
+        var hotelsByAmenity = hotelService.findAllByFilter(filterAmenity, AMENITY);
         assertThat(hotelsByName).hasSize(1);
         assertThat(hotelsByBrand).hasSize(4);
         assertThat(hotelsByCity).hasSize(5);
         assertThat(hotelsByCountry).hasSize(10);
+        assertThat(hotelsByAmenity).hasSize(6);
 
     }
 

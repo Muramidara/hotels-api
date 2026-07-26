@@ -18,10 +18,7 @@ import project.muramidara.hotelsapi.mapper.HotelCreateEditDtoMapper;
 import project.muramidara.hotelsapi.mapper.HotelFullReadDtoMapper;
 import project.muramidara.hotelsapi.mapper.HotelShortReadDtoMapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -52,7 +49,7 @@ public class HotelService {
 
     //TODO: remake method using Querydsl
     public List<HotelShortReadDto> findAllByFilter(String filterName, String filterValue) {
-        List<Hotel> hotels;
+        List<Hotel> hotels = null;
         switch (filterName) {
             case "name":
                 hotels = hotelRepository.findAllByNameIgnoreCase(filterValue);
@@ -66,9 +63,15 @@ public class HotelService {
             case "country":
                 hotels = hotelRepository.findAllByCountry(filterValue);
                 break;
+            //TODO: replace with findAllByAmenities()
+            //TODO: move this method to AmenityService?
+            case "amenity":
+
+                var hotelAmenities = amenityRepository.findAmenityByName(filterValue).map(Amenity::getHotelAmenities);
+                hotels = hotelAmenities.map(amenities -> amenities.stream().map(HotelAmenity::getHotel).toList()).orElseGet(ArrayList::new);
+                break;
             default:
-                //TODO: replace with findAllByAmenities()
-                hotels = hotelRepository.findAll();
+                hotels = new ArrayList<>();
                 break;
         }
         List<HotelShortReadDto> dtos = hotels.stream().map(hotelShortReadDtoMapper::map).toList();
