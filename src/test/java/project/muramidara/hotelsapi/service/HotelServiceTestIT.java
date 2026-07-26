@@ -5,15 +5,16 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import project.muramidara.hotelsapi.HotelsApiApplication;
+import project.muramidara.hotelsapi.database.entity.Hotel;
 import project.muramidara.hotelsapi.database.repository.HotelRepository;
-import project.muramidara.hotelsapi.dto.AddressDto;
-import project.muramidara.hotelsapi.dto.ArrivalTimeDto;
-import project.muramidara.hotelsapi.dto.ContactsDto;
-import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
+import project.muramidara.hotelsapi.dto.*;
+import project.muramidara.hotelsapi.mapper.HotelFullReadDtoMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 //@Transactional
 @RequiredArgsConstructor
@@ -32,9 +33,9 @@ public class HotelServiceTestIT {
             new AddressDto(111, "Test street", "London", "UK", "111000"),
             new ContactsDto("test@@mail.com", "+11111111"),
             new ArrivalTimeDto("10:00", "12:00")
-    );;
+    );
 
-    private final HotelRepository hotelRepository;
+    private final HotelFullReadDtoMapper hotelFullReadDtoMapper;
     private final HotelService hotelService;
     //TODO: solve n+1 problem
     @Test
@@ -93,13 +94,19 @@ public class HotelServiceTestIT {
 
     @Test
     void addAmenitiesTest() {
-        var hotel = hotelRepository.getReferenceById(HOTEL1_ID);
-        var testingName = "Testing hotel name";
-        assertEquals("Grand Plaza Downtown", hotel.getName());
-        hotel.setName(testingName);
-        hotelRepository.flush();
-        hotel = hotelRepository.getReferenceById(HOTEL1_ID);
-        assertEquals(testingName, hotel.getName());
+        var hotel = hotelService.findById(HOTEL1_ID).get();
+        String amenity1Name = "Test amenity 1";
+        String amenity2Name = AMENITY;
+        assertFalse(hotel.getAmenities().stream().anyMatch(amenityDto -> amenityDto.getName().equals(amenity1Name)));
+        assertFalse(hotel.getAmenities().stream().anyMatch(amenityDto -> amenityDto.getName().equals(amenity2Name)));
+        List<AmenityDto> amenityDtos = new ArrayList<>();
+        amenityDtos.add(new AmenityDto(amenity1Name));
+        amenityDtos.add(new AmenityDto(amenity2Name));
+        hotelService.addAmenities(HOTEL1_ID, amenityDtos);
+        hotel = hotelService.findById(HOTEL1_ID).get();
+        assertTrue(hotel.getAmenities().stream().anyMatch(amenityDto -> amenityDto.getName().equals(amenity1Name)));
+        assertTrue(hotel.getAmenities().stream().anyMatch(amenityDto -> amenityDto.getName().equals(amenity2Name)));
+
     }
 
     @Test
