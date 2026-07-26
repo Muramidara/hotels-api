@@ -20,6 +20,7 @@ public class HotelShortReadDtoMapper implements Mapper<Hotel, HotelShortReadDto>
         return HotelShortReadDto.builder()
                 .name(hotel.getName())
                 .description(hotel.getDescription())
+                .brand(hotel.getBrand())
                 .address(buildAddress(addressDto))
                 .phone(contactsDto.getPhone())
                 .build();
@@ -27,7 +28,7 @@ public class HotelShortReadDtoMapper implements Mapper<Hotel, HotelShortReadDto>
 
     private static String buildAddress(AddressDto addressDto) {
         return String.join(", ",
-                addressDto.getHouseNumber() + addressDto.getStreet(),
+                addressDto.getHouseNumber()+ " " + addressDto.getStreet(),
                 addressDto.getCity(), addressDto.getPostCode()
                 , addressDto.getCountry());
     }
