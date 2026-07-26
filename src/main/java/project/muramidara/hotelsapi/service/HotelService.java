@@ -122,7 +122,7 @@ public class HotelService {
         switch (filter) {
             case "brand":
                 map = hotels.stream().collect(
-                        Collectors.groupingBy(Hotel::getName, Collectors.counting()));
+                        Collectors.groupingBy(Hotel::getBrand, Collectors.counting()));
                 break;
             case "city":
                 map = hotels.stream().collect(
@@ -138,8 +138,9 @@ public class HotelService {
                                 Collectors.counting()));
 
                 break;
-                //TODO: move this method to AmenityService?
-            case "amenities":
+            //TODO: move this method to AmenityService?
+            //TODO: replace with findAllByAmenities()
+            case "amenity":
                 var amenities = amenityRepository.findAll();
                 map = amenities.stream().collect(
                         Collectors.toMap(

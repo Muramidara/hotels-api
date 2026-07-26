@@ -110,6 +110,25 @@ public class HotelServiceTestIT {
     }
 
     @Test
+    void groupByFilterTest() {
+        var groupByBrand = "brand";
+        var groupByCity = "city";
+        var groupByCountry = "country";
+        // TODO: replace amenity with amenities
+        var groupByAmenity = "amenity";
+        var hotelsByBrand = hotelService.findAllGroupByFilter(groupByBrand);
+        var hotelsByCity = hotelService.findAllGroupByFilter(groupByCity);
+        var hotelsByCountry = hotelService.findAllGroupByFilter(groupByCountry);
+        var hotelsByAmenity = hotelService.findAllGroupByFilter(groupByAmenity);
+        assertThat(hotelsByBrand).hasSize(5);
+        assertThat(hotelsByCity).hasSize(3);
+        assertThat(hotelsByCountry).hasSize(2);
+        assertThat(hotelsByCountry.get("USA")).isEqualTo(10);
+        assertThat(hotelsByCountry.get("UK")).isEqualTo(5);
+        assertThat(hotelsByAmenity).hasSize(12);
+    }
+
+    @Test
     void updateTest() {
         var existingHotel = hotelService.findById(HOTEL1_ID);
         var fakeHotel = hotelService.findById(-1L);
@@ -122,17 +141,6 @@ public class HotelServiceTestIT {
 
     @Test
     void deleteTest() {
-        var existingHotel = hotelService.findById(HOTEL1_ID);
-        var fakeHotel = hotelService.findById(-1L);
-        assertTrue(existingHotel.isPresent());
-        assertTrue(fakeHotel.isEmpty());
-        existingHotel.ifPresent(hotel ->
-                assertEquals("Grand Plaza Downtown", hotel.getName())
-        );
-    }
-
-    @Test
-    void groupByFilterTest() {
         var existingHotel = hotelService.findById(HOTEL1_ID);
         var fakeHotel = hotelService.findById(-1L);
         assertTrue(existingHotel.isPresent());
