@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.muramidara.hotelsapi.database.entity.Amenity;
 import project.muramidara.hotelsapi.database.entity.Hotel;
 import project.muramidara.hotelsapi.database.entity.HotelAmenity;
-import project.muramidara.hotelsapi.database.repository.AmenityRepository;
-import project.muramidara.hotelsapi.database.repository.HotelAmenityRepository;
-import project.muramidara.hotelsapi.database.repository.HotelRepository;
+import project.muramidara.hotelsapi.database.repository.*;
 import project.muramidara.hotelsapi.dto.AmenityDto;
 import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
 import project.muramidara.hotelsapi.dto.HotelFullReadDto;
@@ -29,6 +27,9 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final HotelAmenityRepository hotelAmenityRepository;
     private final AmenityRepository amenityRepository;
+    private final ContactsRepository contactsRepository;
+    private final ArrivalTimeRepository arrivalTimeRepository;
+    private final AddressRepository addressRepository;
     private final HotelShortReadDtoMapper hotelShortReadDtoMapper;
     private final HotelFullReadDtoMapper hotelFullReadDtoMapper;
     private final HotelCreateEditDtoMapper hotelCreateEditDtoMapper;
@@ -81,6 +82,9 @@ public class HotelService {
     @Transactional(readOnly = false)
     public HotelShortReadDto create(HotelCreateEditDto dto) {
         var hotel = hotelCreateEditDtoMapper.map(dto);
+        addressRepository.save(hotel.getAddress());
+        arrivalTimeRepository.save(hotel.getArrivalTime());
+        contactsRepository.save(hotel.getContacts());
         hotel = hotelRepository.save(hotel);
         var responseDto = hotelShortReadDtoMapper.map(hotel);
         return responseDto;

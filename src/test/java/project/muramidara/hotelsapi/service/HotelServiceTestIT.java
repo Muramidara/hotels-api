@@ -2,11 +2,14 @@ package project.muramidara.hotelsapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import project.muramidara.hotelsapi.HotelsApiApplication;
 import project.muramidara.hotelsapi.database.repository.HotelRepository;
+import project.muramidara.hotelsapi.dto.AddressDto;
+import project.muramidara.hotelsapi.dto.ArrivalTimeDto;
+import project.muramidara.hotelsapi.dto.ContactsDto;
+import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +25,14 @@ public class HotelServiceTestIT {
     private final static String HOTEL_CITY = "London";
     private final static String HOTEL_COUNTRY = "USA";
     private final static String AMENITY = "Parking";
+    private final static HotelCreateEditDto HOTEL_CREATE_EDIT_DTO = new HotelCreateEditDto(
+            "test name",
+            "Test description",
+            "Hilton",
+            new AddressDto(111, "Test street", "London", "UK", "111000"),
+            new ContactsDto("test@@mail.com", "+11111111"),
+            new ArrivalTimeDto("10:00", "12:00")
+    );;
 
     private final HotelRepository hotelRepository;
     private final HotelService hotelService;
@@ -72,6 +83,15 @@ public class HotelServiceTestIT {
 
 
     @Test
+    void createTest() {
+        var response = hotelService.create(HOTEL_CREATE_EDIT_DTO);
+        var hotelInDatabase = hotelService.findById(response.getId());
+        assertTrue(hotelInDatabase.isPresent());
+        assertEquals(HOTEL_CREATE_EDIT_DTO.getName(), hotelInDatabase.get().getName());
+
+    }
+
+    @Test
     void addAmenitiesTest() {
         var hotel = hotelRepository.getReferenceById(HOTEL1_ID);
         var testingName = "Testing hotel name";
@@ -95,17 +115,6 @@ public class HotelServiceTestIT {
 
     @Test
     void deleteTest() {
-        var existingHotel = hotelService.findById(HOTEL1_ID);
-        var fakeHotel = hotelService.findById(-1L);
-        assertTrue(existingHotel.isPresent());
-        assertTrue(fakeHotel.isEmpty());
-        existingHotel.ifPresent(hotel ->
-                assertEquals("Grand Plaza Downtown", hotel.getName())
-        );
-    }
-
-    @Test
-    void createTest() {
         var existingHotel = hotelService.findById(HOTEL1_ID);
         var fakeHotel = hotelService.findById(-1L);
         assertTrue(existingHotel.isPresent());
