@@ -51,20 +51,20 @@ public class HotelService {
     }
 
     //TODO: remake method using Querydsl
-    public List<HotelShortReadDto> findAllByFilter(String filter) {
+    public List<HotelShortReadDto> findAllByFilter(String filterName, String filterValue) {
         List<Hotel> hotels;
-        switch (filter) {
+        switch (filterName) {
             case "name":
-                hotels = hotelRepository.findAllByNameIgnoreCase(filter);
+                hotels = hotelRepository.findAllByNameIgnoreCase(filterValue);
                 break;
             case "brand":
-                hotels = hotelRepository.findAllByBrandIgnoreCase(filter);
+                hotels = hotelRepository.findAllByBrandIgnoreCase(filterValue);
                 break;
             case "city":
-                hotels = hotelRepository.findAllByCity(filter);
+                hotels = hotelRepository.findAllByCity(filterValue);
                 break;
             case "country":
-                hotels = hotelRepository.findAllByCountry(filter);
+                hotels = hotelRepository.findAllByCountry(filterValue);
                 break;
             default:
                 //TODO: replace with findAllByAmenities()
