@@ -21,7 +21,6 @@ public class HotelShortReadDtoMapper implements Mapper<Hotel, HotelShortReadDto>
                 .id(hotel.getId())
                 .name(hotel.getName())
                 .description(hotel.getDescription())
-                .brand(hotel.getBrand())
                 .address(buildAddress(addressDto))
                 .phone(contactsDto.getPhone())
                 .build();
