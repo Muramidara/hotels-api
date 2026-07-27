@@ -50,7 +50,7 @@ public class HotelService {
 
     //TODO: remake method using Querydsl
     public List<HotelShortReadDto> findAllByFilter(String filterName, String filterValue) {
-        List<Hotel> hotels = null;
+        List<Hotel> hotels = new ArrayList<>();
         switch (filterName) {
             case "name":
                 hotels = hotelRepository.findAllByNameIgnoreCase(filterValue);
@@ -72,7 +72,6 @@ public class HotelService {
                 hotels = hotelAmenities.map(amenities -> amenities.stream().map(HotelAmenity::getHotel).toList()).orElseGet(ArrayList::new);
                 break;
             default:
-                hotels = new ArrayList<>();
                 break;
         }
         List<HotelShortReadDto> dtos = hotels.stream().map(hotelShortReadDtoMapper::map).toList();
@@ -118,7 +117,7 @@ public class HotelService {
     //TODO: remake method using Querydsl
     public Map<String, Long> findAllGroupByFilter(String filter) {
         var hotels = hotelRepository.findAll();
-        Map<String, Long> map = null;
+        Map<String, Long> map = new HashMap<>();
         switch (filter) {
             case "brand":
                 map = hotels.stream().collect(
