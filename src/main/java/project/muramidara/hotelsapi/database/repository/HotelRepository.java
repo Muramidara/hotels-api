@@ -18,6 +18,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query(value = "SELECT h FROM Hotel h JOIN FETCH Address a ON h.address = a WHERE a.country = :country")
     List<Hotel> findAllByCountry(@Param("country") String country);
 
+
     Hotel findHotelByName(String s);
 
 

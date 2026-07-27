@@ -153,4 +153,27 @@ public class HotelService {
         return map;
     }
 
+    //TODO: make amenities also updatable
+    public HotelFullReadDto update(Long id, HotelCreateEditDto dto){
+        var optionalHotelInDatabase = hotelRepository.findById(id);
+        if(optionalHotelInDatabase.isEmpty()) return null;
+        Hotel hotelInDatabase = optionalHotelInDatabase.get();
+        var hotelWithUpdates = hotelCreateEditDtoMapper.map(dto, hotelInDatabase);
+
+        addressRepository.save(hotelWithUpdates.getAddress());
+        arrivalTimeRepository.save(hotelWithUpdates.getArrivalTime());
+        contactsRepository.save(hotelWithUpdates.getContacts());
+        hotelRepository.save(hotelWithUpdates);
+        var responseDto = hotelFullReadDtoMapper.map(hotelWithUpdates);
+        return responseDto;
+    }
+
+    public boolean delete(Long id){
+        if(hotelRepository.findById(id).isPresent()){
+            hotelRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }
