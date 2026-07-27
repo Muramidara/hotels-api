@@ -35,4 +35,57 @@ public class HotelResporitoryTests {
         assertThat(savedHotel).isNotNull();
         assertThat(savedHotel.getId()).isNotNull();
     }
+    @Test
+    @DisplayName("Test update hotel functionality")
+    public void giveHotelToUpdate_whenSave_thenBrandIsChanged(){
+        //given
+        String updatedBrand = "Updated brand";
+        Hotel hotelToCreate = Hotel.builder()
+                .name("test hotel")
+                .brand("test brand")
+                .description("description for test hotel")
+                .build();
+        hotelRepository.save(hotelToCreate);
+        //when
+        Hotel hotelToUpdate = hotelRepository.findById( hotelToCreate.getId()).orElse(null);
+        hotelToUpdate.setBrand(updatedBrand);
+        Hotel updatedHotel = hotelRepository.save(hotelToUpdate);
+        //then
+        assertThat(updatedHotel).isNotNull();
+        assertThat(updatedHotel.getBrand()).isEqualTo(updatedBrand);
+    }
+
+    @Test
+    @DisplayName("Test get hotel by id functionality")
+    public void givenHotelCreated_whenGetById_thenHotelIsReturned(){
+        //given
+        Hotel hotelToSave = Hotel.builder()
+                .name("test hotel")
+                .brand("test brand")
+                .description("description for test hotel")
+                .build();
+        hotelRepository.save(hotelToSave);
+        //when
+        Hotel obtainedHotel = hotelRepository.findById(hotelToSave.getId()).orElse(null);
+        //then
+        assertThat(obtainedHotel).isNotNull();
+        assertThat(obtainedHotel.getBrand()).isEqualTo("test brand");
+    }
+
+    @Test
+    @DisplayName("Test hotel not found functionality")
+    public void givenHotelIsNotCreated_whenGetById_thenOptionalIsEmpty(){
+        //given
+
+        //when
+        Hotel obtainedHotel = hotelRepository.findById(1L).orElse(null);
+        //then
+        assertThat(obtainedHotel).isNull();
+    }
 }
+
+//given
+
+//when
+
+//then
