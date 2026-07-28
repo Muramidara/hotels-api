@@ -81,9 +81,9 @@ public class HotelService {
     @Transactional(readOnly = false)
     public HotelShortReadDto create(HotelCreateEditDto dto) {
         var hotel = hotelCreateEditDtoMapper.map(dto);
-        addressRepository.save(hotel.getAddress());
-        arrivalTimeRepository.save(hotel.getArrivalTime());
-        contactsRepository.save(hotel.getContacts());
+//        addressRepository.save(hotel.getAddress());
+//        arrivalTimeRepository.save(hotel.getArrivalTime());
+//        contactsRepository.save(hotel.getContacts());
         hotel = hotelRepository.save(hotel);
         var responseDto = hotelShortReadDtoMapper.map(hotel);
         return responseDto;

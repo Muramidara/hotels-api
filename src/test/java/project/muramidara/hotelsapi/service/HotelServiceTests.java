@@ -50,11 +50,10 @@ public class HotelServiceTests {
     @DisplayName("Test save hotel functionality")
     public void givenHotelToSave_whenSaveHotel_thenRepositoryIsCalled(){
         //given
-        HotelCreateEditDto hotelDtoToSave = DataUtils.getTestHotelDto();
-        BDDMockito.given(hotelRepository.findHotelByName(anyString()))
-                .willReturn(null);
+        HotelCreateEditDto hotelDtoToSave = DataUtils.getTestHotelCreateEditDto();
         BDDMockito.given(hotelRepository.save(any(Hotel.class))).willReturn(DataUtils.getTestHotelPersistent());
-//        BDDMockito.given(hotelCreateEditDtoMapper.map(any(HotelCreateEditDto.class))).willReturn(DataUtils.getTestHotelPersistent());
+        BDDMockito.given(hotelCreateEditDtoMapper.map(any(HotelCreateEditDto.class))).willReturn(DataUtils.getTestHotelTransient());
+        BDDMockito.given(hotelShortReadDtoMapper.map(any(Hotel.class))).willReturn(DataUtils.getTestHotelShortReadDto());
         //when
         HotelShortReadDto savedHotelDto = hotelService.create(hotelDtoToSave);
 
