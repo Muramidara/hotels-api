@@ -10,6 +10,7 @@ import project.muramidara.hotelsapi.dto.AmenityDto;
 import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
 import project.muramidara.hotelsapi.dto.HotelFullReadDto;
 import project.muramidara.hotelsapi.dto.HotelShortReadDto;
+import project.muramidara.hotelsapi.exception.HotelNotFoundException;
 import project.muramidara.hotelsapi.service.HotelService;
 
 import java.util.ArrayList;
@@ -29,8 +30,12 @@ public class HotelController {
 
     @GetMapping("/hotels/{id}")
     public HotelFullReadDto findById(@PathVariable("id") Long id){
-        var dto = hotelService.findById(id);
-        return dto.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        try{
+            var dto = hotelService.findById(id);
+            return dto.get();
+        }catch(HotelNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     //TODO: make method more flexible
@@ -67,9 +72,12 @@ public class HotelController {
 
     @PostMapping("/hotels/{id}/amenities")
     public HotelFullReadDto create(@PathVariable("id") Long id, @RequestBody List<AmenityDto> dtos){
-        var response = hotelService.addAmenities(id, dtos);
-        if(response == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return response;
+        try{
+            var response = hotelService.addAmenities(id, dtos);
+                return response;
+        }catch (HotelNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/histogram/{param}")
@@ -77,5 +85,25 @@ public class HotelController {
         var response = hotelService.findAllGroupByFilter(filter);
         if(response.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return response;
+    }
+
+    @PutMapping("/hotels/{id}")
+    public HotelFullReadDto update(@PathVariable("id") Long id, @RequestBody HotelCreateEditDto dto){
+        try{
+            var response = hotelService.update(id, dto);
+            return response;
+        } catch (HotelNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/hotels/{id}")
+    public boolean delete(@PathVariable("id") Long id){
+        try{
+            var response = hotelService.delete(id);
+            return response;
+        } catch (HotelNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }
