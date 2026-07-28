@@ -40,7 +40,7 @@ public class HotelRestController {
 
     //TODO: make method more flexible
     @GetMapping("/search")
-    public ResponseEntity<?> findById(@RequestParam(required = false) String name,
+    public ResponseEntity<?> findByFilter(@RequestParam(required = false) String name,
                                             @RequestParam(required = false) String brand,
                                             @RequestParam(required = false) String city,
                                             @RequestParam(required = false) String country,
@@ -72,7 +72,7 @@ public class HotelRestController {
     }
 
     @PostMapping("/hotels/{id}/amenities")
-    public ResponseEntity<?> create(@PathVariable("id") Long id, @RequestBody List<AmenityDto> dtos) {
+    public ResponseEntity<?> addAmenities(@PathVariable("id") Long id, @RequestBody List<AmenityDto> dtos) {
         try {
             var response = hotelService.addAmenities(id, dtos);
             return ResponseEntity.ok(response);
