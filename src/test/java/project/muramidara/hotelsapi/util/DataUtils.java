@@ -2,6 +2,7 @@ package project.muramidara.hotelsapi.util;
 
 import project.muramidara.hotelsapi.database.entity.Address;
 import project.muramidara.hotelsapi.database.entity.Hotel;
+import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
 
 public class DataUtils {
     public static Hotel getTestHotelTransient(){
@@ -32,6 +33,45 @@ public class DataUtils {
 
     public static Hotel getTestHotel3Transient(){
         return Hotel.builder()
+                .name("test hotel 3")
+                .brand("Holynight Out")
+                .description("description for test hotel 3 ")
+//                .address(Address.builder()
+//                        .city("Gomel")
+//                        .country("Belarus")
+//                        .build()
+//                )
+                .build();
+    }
+
+    public static HotelCreateEditDto getTestHotelDto(){
+        return HotelCreateEditDto.builder()
+                .name("test hotel")
+                .brand("Helton")
+                .description("description for test hotel")
+//                .address(Address.builder()
+//                        .city("Minsk")
+//                        .country("Belarus")
+//                        .build()
+//                )
+                .build();
+    }
+
+    public static HotelCreateEditDto getTestHotel2Dto(){
+        return HotelCreateEditDto.builder()
+                .name("test hotel 2")
+                .brand("Helton")
+                .description("description for test hotel 2")
+//                .address(Address.builder()
+//                        .city("Minsk")
+//                        .country("Belarus")
+//                        .build()
+//                )
+                .build();
+    }
+
+    public static HotelCreateEditDto getTestHotel3Dto(){
+        return HotelCreateEditDto.builder()
                 .name("test hotel 3")
                 .brand("Holynight Out")
                 .description("description for test hotel 3 ")
