@@ -62,7 +62,7 @@ public class HotelResporitoryTests {
         Hotel obtainedHotel = hotelRepository.findById(hotelToSave.getId()).orElse(null);
         //then
         assertThat(obtainedHotel).isNotNull();
-        assertThat(obtainedHotel.getBrand()).isEqualTo("test brand");
+        assertThat(obtainedHotel.getBrand()).isEqualTo("Marriott");
     }
 
     @Test
@@ -80,9 +80,9 @@ public class HotelResporitoryTests {
     @DisplayName("Test get all hotels functionality")
     public void givenThreeHotelsAreStored_whenFindAll_thenAllHotelsAreReturned() {
         //given
-        Hotel hotel1 = DataUtils.getTestHotelTransient();
-        Hotel hotel2 = DataUtils.getTestHotel2Transient();
-        Hotel hotel3 = DataUtils.getTestHotel3Transient();
+        Hotel hotel1 = DataUtils.getTestHotelMinimalTransient();
+        Hotel hotel2 = DataUtils.getTestHotel2MinimalTransient();
+        Hotel hotel3 = DataUtils.getTestHotel3MinimalTransient();
 
         hotelRepository.saveAll(List.of(hotel1, hotel2, hotel3));
         //when
@@ -96,10 +96,10 @@ public class HotelResporitoryTests {
     @DisplayName("Test get hotel by name functionality")
     public void givenHotelSaved_whenGetByName_thenHotelIsReturned(){
         //given
-        Hotel hotel = DataUtils.getTestHotelTransient();
+        Hotel hotel = DataUtils.getTestHotelMinimalTransient();
         hotelRepository.save(hotel);
         //when
-        Hotel obtainedHotel = hotelRepository.findHotelByName("test hotel");
+        Hotel obtainedHotel = hotelRepository.findHotelByName("Grand Plaza Downtown");
         //then
         assertThat(obtainedHotel).isNotNull();
         assertThat(obtainedHotel.getName()).isEqualTo(hotel.getName());
@@ -109,16 +109,16 @@ public class HotelResporitoryTests {
     @DisplayName("Test get all hotels by brand functionality")
     public void givenThreeHotelsAndTwoAreHelton_whenFindAllByBrand_thenReturnOnlyTwoHotels(){
         //given
-        Hotel hotel1 = DataUtils.getTestHotelTransient();
-        Hotel hotel2 = DataUtils.getTestHotel2Transient();
-        Hotel hotel3 = DataUtils.getTestHotel3Transient();
+        Hotel hotel1 = DataUtils.getTestHotelMinimalTransient();
+        Hotel hotel2 = DataUtils.getTestHotel2MinimalTransient();
+        Hotel hotel3 = DataUtils.getTestHotel3MinimalTransient();
 
         hotelRepository.saveAll(List.of(hotel1, hotel2, hotel3));
         //when
         List<Hotel> obtainedHotels = hotelRepository.findAllByBrandIgnoreCase("Helton");
         //then
         assertThat(CollectionUtils.isEmpty(obtainedHotels)).isFalse();
-        assertThat(obtainedHotels.size()).isEqualTo(2);
+        assertThat(obtainedHotels.size()).isEqualTo(1);
     }
 
     @Test

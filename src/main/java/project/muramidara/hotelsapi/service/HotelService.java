@@ -11,6 +11,7 @@ import project.muramidara.hotelsapi.dto.AmenityDto;
 import project.muramidara.hotelsapi.dto.HotelCreateEditDto;
 import project.muramidara.hotelsapi.dto.HotelFullReadDto;
 import project.muramidara.hotelsapi.dto.HotelShortReadDto;
+import project.muramidara.hotelsapi.exception.HotelNotFoundException;
 import project.muramidara.hotelsapi.mapper.AmenityDtoMapper;
 import project.muramidara.hotelsapi.mapper.HotelCreateEditDtoMapper;
 import project.muramidara.hotelsapi.mapper.HotelFullReadDtoMapper;
@@ -44,6 +45,7 @@ public class HotelService {
 
     public Optional<HotelFullReadDto> findById(Long id) {
         var hotel = hotelRepository.findById(id);
+        if(hotel.isEmpty()) throw new HotelNotFoundException("Hotel not found");
         var hotelDto = hotel.map(hotelFullReadDtoMapper::map);
         return hotelDto;
     }
@@ -67,7 +69,6 @@ public class HotelService {
             //TODO: replace with findAllByAmenities()
             //TODO: move this method to AmenityService?
             case "amenity":
-
                 var hotelAmenities = amenityRepository.findAmenityByName(filterValue).map(Amenity::getHotelAmenities);
                 hotels = hotelAmenities.map(amenities -> amenities.stream().map(HotelAmenity::getHotel).toList()).orElseGet(ArrayList::new);
                 break;
@@ -81,9 +82,9 @@ public class HotelService {
     @Transactional(readOnly = false)
     public HotelShortReadDto create(HotelCreateEditDto dto) {
         var hotel = hotelCreateEditDtoMapper.map(dto);
-//        addressRepository.save(hotel.getAddress());
-//        arrivalTimeRepository.save(hotel.getArrivalTime());
-//        contactsRepository.save(hotel.getContacts());
+        addressRepository.save(hotel.getAddress());
+        arrivalTimeRepository.save(hotel.getArrivalTime());
+        contactsRepository.save(hotel.getContacts());
         hotel = hotelRepository.save(hotel);
         var responseDto = hotelShortReadDtoMapper.map(hotel);
         return responseDto;
@@ -93,7 +94,7 @@ public class HotelService {
     public HotelFullReadDto addAmenities(Long id, List<AmenityDto> dtos) {
         HotelFullReadDto hotelDto = null;
         var hotel = hotelRepository.findById(id);
-        hotel.ifPresent(h -> {
+        hotel.ifPresentOrElse(h -> {
             var amenities = dtos.stream().map(amenityDtoMapper::mapFrom).toList();
             amenities.forEach(amenity -> {
                 var hotelAmenity = new HotelAmenity();
@@ -107,10 +108,10 @@ public class HotelService {
                 hotelAmenity.setHotel(h);
                 hotelAmenityRepository.save(hotelAmenity);
             });
+        }, () -> {
+            throw new HotelNotFoundException("Hotel not found");
         });
-        if (hotel.isPresent()) {
-            hotelDto = hotelFullReadDtoMapper.map(hotel.get());
-        }
+        hotelDto = hotelFullReadDtoMapper.map(hotel.get());
         return hotelDto;
     }
 
@@ -138,7 +139,6 @@ public class HotelService {
 
                 break;
             //TODO: move this method to AmenityService?
-            //TODO: replace with findAllByAmenities()
             case "amenity":
                 var amenities = amenityRepository.findAll();
                 map = amenities.stream().collect(
@@ -156,7 +156,7 @@ public class HotelService {
     //TODO: make amenities also updatable
     public HotelFullReadDto update(Long id, HotelCreateEditDto dto){
         var optionalHotelInDatabase = hotelRepository.findById(id);
-        if(optionalHotelInDatabase.isEmpty()) return null;
+        if(optionalHotelInDatabase.isEmpty()) throw new HotelNotFoundException("Hotel not found");
         Hotel hotelInDatabase = optionalHotelInDatabase.get();
         var hotelWithUpdates = hotelCreateEditDtoMapper.map(dto, hotelInDatabase);
 
@@ -173,7 +173,7 @@ public class HotelService {
             hotelRepository.deleteById(id);
             return true;
         }
-        return false;
+        throw new HotelNotFoundException("Hotel not found");
     }
 
 }

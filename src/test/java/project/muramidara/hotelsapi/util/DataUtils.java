@@ -1,10 +1,9 @@
 package project.muramidara.hotelsapi.util;
 
-import project.muramidara.hotelsapi.database.entity.Address;
-import project.muramidara.hotelsapi.database.entity.ArrivalTime;
-import project.muramidara.hotelsapi.database.entity.Contacts;
-import project.muramidara.hotelsapi.database.entity.Hotel;
+import project.muramidara.hotelsapi.database.entity.*;
 import project.muramidara.hotelsapi.dto.*;
+
+import java.util.List;
 
 public class DataUtils {
     public static Hotel getTestHotelTransient(){
@@ -16,6 +15,39 @@ public class DataUtils {
                 .arrivalTime(getTestArrivalTime())
                 .contacts(getTestContacts())
                 .build();
+    }
+
+    public static List<Hotel> getTestHotelList(){
+        return List.of(getTestHotelTransient());
+    }
+
+    public static Amenity getTestAmenityPersistent(){
+        var amenity = new Amenity();
+        amenity.setName("Existing amenity");
+        amenity.setId(1L);
+        return amenity;
+    }
+
+    public static Amenity getTestAmenityTransient(){
+        var amenity = new Amenity();
+        amenity.setName("New amenity");
+        return amenity;
+    }
+
+    public static HotelAmenity getTestHotelAmenityPersistent(){
+        var hotelAmenity = new HotelAmenity();
+        hotelAmenity.setId(1L);
+        return hotelAmenity;
+    }
+
+    public static HotelAmenity getTestHotelAmenityTransient(){
+        var hotelAmenity = new HotelAmenity();
+        return hotelAmenity;
+    }
+
+    public static AmenityDto getTestAmenityDto(){
+        var dto = new AmenityDto("Amenity dto");
+        return dto;
     }
 
     public static Hotel getTestHotelMinimalTransient(){
