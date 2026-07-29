@@ -34,7 +34,7 @@ public class Hotel {
     @OneToOne
     ArrivalTime arrivalTime;
     @Builder.Default
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<HotelAmenity> amenities = new ArrayList<>();
 
 }
