@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import project.muramidara.hotelsapi.HotelsApiApplication;
-import project.muramidara.hotelsapi.database.entity.Hotel;
-import project.muramidara.hotelsapi.database.repository.HotelRepository;
 import project.muramidara.hotelsapi.dto.*;
 import project.muramidara.hotelsapi.mapper.HotelFullReadDtoMapper;
 
