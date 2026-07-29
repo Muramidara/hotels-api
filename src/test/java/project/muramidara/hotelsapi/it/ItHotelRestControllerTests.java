@@ -186,7 +186,7 @@ public class ItHotelRestControllerTests {
 
     @Test
     @DisplayName("Test find all hotels functionality")
-    public void givenThreeHotels_whenFindAll_thenSuccessResponse() throws Exception {
+    public void givenHotels_whenFindAll_thenSuccessResponse() throws Exception {
         //given
 
         //when
@@ -200,111 +200,99 @@ public class ItHotelRestControllerTests {
 
     @Test
     @DisplayName("Test find all by filter city functionality")
-    public void givenHotel_whenFindAllByFilterCity_thenSuccessResponse() throws Exception {
+    public void givenFilter_whenFindAllByFilterCity_thenSuccessResponse() throws Exception {
         //given
-        var hotel1 =  DataUtils.getTestHotelShortReadDto();
+        var filterName = "city";
+        var filterValue = "London";
 
 
         //when
         ResultActions result = mockMvc.perform(get("/api/v1/search")
-                .param("city", "London"));
+                .param(filterName,filterValue));
         //then
         result
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(5)));
     }
-//
-//    @Test
-//    @DisplayName("Test find all by incorrect filter functionality")
-//    public void givenHotel_whenFindAllByIncorrectFilter_thenBadRequestResponse() throws Exception {
-//        //given
-//        var hotel1 =  DataUtils.getTestHotelShortReadDto();
-//
-//        BDDMockito.given(hotelService.findAllByFilter(anyString(), anyString()))
-//                .willReturn(List.of(hotel1));
-//        //when
-//        ResultActions result = mockMvc.perform(get("/api/v1/search"));
-//        //then
-//        verify(hotelService, never()).findAllByFilter(anyString(), anyString());
-//        result
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-//    }
-//
-//    @Test
-//    @DisplayName("Test find all group by filter city functionality")
-//    public void givenMap_whenFindAllGroupByFilterCity_thenSuccessResponse() throws Exception {
-//        //given
-//        Map<String, Long> map = Map.of("Berlin", 3L, "Volgograd", 1L);
-//
-//        BDDMockito.given(hotelService.findAllGroupByFilter( anyString()))
-//                .willReturn(map);
-//        //when
-//        ResultActions result = mockMvc.perform(get("/api/v1/histogram/city"));
-//        //then
-//        result
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(2)));
-//    }
-//
-//    @Test
-//    @DisplayName("Test find all group by incorrect filter functionality")
-//    public void givenMap_whenFindAllGroupByIncorrectFilter_thenBadRequestResponse() throws Exception {
-//        //given
-//        Map<String, Long> map = Map.of();
-//
-//        BDDMockito.given(hotelService.findAllGroupByFilter( anyString()))
-//                .willReturn(map);
-//        //when
-//        ResultActions result = mockMvc.perform(get("/api/v1/histogram/blabla"));
-//        //then
-//        result
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-//    }
-//
-//    @Test
-//    @DisplayName("Test add amenities to hotel by id functionality")
-//    public void givenExistingIdAndAmenities_whenAddAmenities_thenSuccessResponse() throws Exception {
-//        //given
-//        var amenities = List.of(DataUtils.getTestAmenityDto(), DataUtils.getTestAmenityDto());
-//        var responseDto = DataUtils.getTestHotelFullReadDto();
-//        BDDMockito.given(hotelService.addAmenities(anyLong(), any(List.class)))
-//                .willReturn(responseDto);
-//        //when
-//        ResultActions result = mockMvc.perform(post("/api/v1/hotels/1/amenities")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(amenities)));
-//        //then
-//        result
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.notNullValue()))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is("Grand" +
-//                        " Plaza Downtown")))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.description",
-//                        CoreMatchers.is("Luxury 5-star hotel with panoramic city views.")));
-//    }
-//
-//    @Test
-//    @DisplayName("Test add amenities to hotel by incorrect id functionality")
-//    public void givenIncorrectIdAndAmenities_whenAddAmenities_thenErrorResponse() throws Exception {
-//        //given
-//        var amenities = List.of(DataUtils.getTestAmenityDto(), DataUtils.getTestAmenityDto());
-//        BDDMockito.given(hotelService.addAmenities(anyLong(), any(List.class)))
-//                .willThrow( new HotelNotFoundException("Hotel not found"));
-//        //when
-//        ResultActions result = mockMvc.perform(post("/api/v1/hotels/1/amenities")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(amenities)));
-//        //then
-//        result
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isNotFound())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(404)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-//                        CoreMatchers.is("Hotel not found")));
-//    }
+
+    @Test
+    @DisplayName("Test find all by incorrect filter functionality")
+    public void givenNoFilter_whenFindAllByIncorrectFilter_thenBadRequestResponse() throws Exception {
+        //given
+                //when
+        ResultActions result = mockMvc.perform(get("/api/v1/search"));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Test find all group by filter city functionality")
+    public void givenFilter_whenFindAllGroupByFilterCity_thenSuccessResponse() throws Exception {
+        //given
+        var filter = "city";
+
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/histogram/"+filter));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(3)));
+    }
+
+    @Test
+    @DisplayName("Test find all group by incorrect filter functionality")
+    public void givenIncorrectFilter_whenFindAllGroupByIncorrectFilter_thenBadRequestResponse() throws Exception {
+        //given
+        var incorrectFilter= "incorrect";
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/histogram/"+incorrectFilter));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Test add amenities to hotel by id functionality")
+    public void givenExistingIdAndAmenities_whenAddAmenities_thenSuccessResponse() throws Exception {
+        //given
+        var amenities = List.of(DataUtils.getTestAmenityDto(), DataUtils.getTestAmenityDto());
+        var existingId = 1L;
+        //when
+        ResultActions result = mockMvc.perform(post("/api/v1/hotels/"+existingId+ "/amenities")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(amenities)));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.notNullValue()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is("Grand" +
+                        " Plaza Downtown")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description",
+                        CoreMatchers.is("Luxury 5-star hotel with panoramic city views and a rooftop pool.")));
+    }
+
+    @Test
+    @DisplayName("Test add amenities to hotel by incorrect id functionality")
+    public void givenIncorrectIdAndAmenities_whenAddAmenities_thenErrorResponse() throws Exception {
+        //given
+        var amenities = List.of(DataUtils.getTestAmenityDto(), DataUtils.getTestAmenityDto());
+        var incorrectId = -1L;
+        //when
+        ResultActions result = mockMvc.perform(post("/api/v1/hotels/"+incorrectId+ "/amenities")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(amenities)));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        CoreMatchers.is("Hotel not found")));
+    }
 }
