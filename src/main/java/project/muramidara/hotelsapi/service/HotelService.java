@@ -154,6 +154,7 @@ public class HotelService {
     }
 
     //TODO: make amenities also updatable
+    @Transactional(readOnly = false)
     public HotelFullReadDto update(Long id, HotelCreateEditDto dto){
         var optionalHotelInDatabase = hotelRepository.findById(id);
         if(optionalHotelInDatabase.isEmpty()) throw new HotelNotFoundException("Hotel not found");
@@ -168,6 +169,7 @@ public class HotelService {
         return responseDto;
     }
 
+    @Transactional(readOnly = false)
     public boolean delete(Long id){
         if(hotelRepository.findById(id).isPresent()){
             hotelRepository.deleteById(id);

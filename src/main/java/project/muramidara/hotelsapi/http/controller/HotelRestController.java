@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/property-view")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class HotelRestController {
     private final HotelService hotelService;

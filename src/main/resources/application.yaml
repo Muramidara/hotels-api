@@ -10,8 +10,8 @@ spring:
   sql:
     init:
       schema-locations: classpath:sql/schema.sql
-#      data-locations: classpath:sql/data.sql
-#      mode: always
+      data-locations: classpath:sql/data.sql
+      mode: always
   h2:
     console:
       enabled: true
